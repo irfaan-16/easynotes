@@ -5,16 +5,14 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-// import { Document, Page } from "react-pdf";
-// import { pdfjs } from "react-pdf";
-
-// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-//     "pdfjs-dist/build/pdf.worker.min.mjs",
-//     import.meta.url
-// ).toString();
+import { Document, Page, pdfjs } from "react-pdf";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 export default function Component() {
     const [file, setFile] = useState<Blob | null>(null);
+    const [images, setImages] = useState<string[] | null>([]);
     const [course, setCourse] = useState("");
     const [year, setYear] = useState("");
     const [subject, setSubject] = useState("");
@@ -22,15 +20,75 @@ export default function Component() {
     const [description, setDescription] = useState("");
     const [numPages, setNumPages] = useState<number>(0);
     const [pageNumber, setPageNumber] = useState(1);
-    const handleFileChange = (e: any) => {
-        setFile(e.target.files[0]);
-        console.log(e.target.files[0]);
-        const reader = new FileReader();
+    const handleFileChange = (event: any) => {
+        const fileList = Array.from(event.target.files);
 
-        if (file) {
-            reader.readAsArrayBuffer(file);
+        // Create URL for each image to display preview
+        const imagePreviews = fileList.map((file: any) =>
+            URL.createObjectURL(file)
+        );
+
+        setImages(imagePreviews);
+    };
+
+    // Handle PDF generation and download
+    const generatePdf = async () => {
+        const doc = new jsPDF();
+
+        // Calculate dimensions to fit image within page width
+        const calculateDimensions = (
+            img: any,
+            maxWidth: number,
+            maxHeight: number
+        ) => {
+            const ratio = img.width / img.height;
+            let imgWidth = maxWidth;
+            let imgHeight = maxWidth / ratio;
+
+            if (imgHeight > maxHeight) {
+                imgHeight = maxHeight;
+                imgWidth = maxHeight * ratio;
+            }
+
+            return { imgWidth, imgHeight };
+        };
+
+        // Helper function to add image to PDF
+        const addImageToPdf = (imageUrl: string) => {
+            return new Promise<void>((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "Anonymous"; // Handle CORS issues if applicable
+                img.onload = () => {
+                    const maxWidth = doc.internal.pageSize.getWidth() - 20; // Adjust margin
+                    const maxHeight = doc.internal.pageSize.getHeight() - 20; // Adjust margin
+
+                    const { imgWidth, imgHeight } = calculateDimensions(
+                        img,
+                        maxWidth,
+                        maxHeight
+                    );
+
+                    doc.addImage(imageUrl, "JPEG", 10, 10, imgWidth, imgHeight);
+                    resolve();
+                };
+                img.src = imageUrl;
+            });
+        };
+
+        // Generate PDF for all images
+        try {
+            for (const imageUrl of images!) {
+                await addImageToPdf(imageUrl);
+                if (imageUrl !== images![images!.length - 1]) {
+                    doc.addPage();
+                }
+            }
+            doc.save("images.pdf");
+        } catch (error) {
+            console.error("Error generating PDF:", error);
         }
     };
+
     const handleSubmit = (e: any) => {
         e.preventDefault();
     };
@@ -115,39 +173,40 @@ export default function Component() {
                                         type="file"
                                         onChange={handleFileChange}
                                         required
-                                        accept=".pdf"
+                                        accept="image/*"
+                                        multiple
                                     />
                                 </div>
                             </div>
-                            {/* {file && (
+                            {images?.length && images.length > 0 && (
                                 <div>
-                                    <button
-                                        onClick={() =>
-                                            setPageNumber((prev) => prev + 1)
-                                        }
-                                        type="button"
-                                    >
-                                        next
-                                    </button>
-                                    <Document
-                                        file={file}
-                                        onLoadSuccess={({ numPages }) =>
-                                            setNumPages(numPages)
-                                        }
-                                    >
-                                        <Page
-                                            pageNumber={pageNumber}
-                                            renderTextLayer={false}
-                                            renderAnnotationLayer={false}
-                                        />
-                                    </Document>
-                                    <p>
-                                        Page {pageNumber} of {numPages}
-                                    </p>
+                                    {images.map((imageUrl, index) => (
+                                        <div
+                                            key={index}
+                                            style={{ margin: "10px 0" }}
+                                        >
+                                            <img
+                                                src={imageUrl}
+                                                alt={`Image ${index}`}
+                                                style={{
+                                                    maxWidth: "100%",
+                                                    height: "auto",
+                                                }}
+                                            />
+                                        </div>
+                                    ))}
                                 </div>
-                            )} */}
+                            )}
                             <Button type="submit" className="w-full">
                                 Upload
+                            </Button>
+
+                            <Button
+                                type="button"
+                                className="w-full"
+                                onClick={generatePdf}
+                            >
+                                Download
                             </Button>
                         </form>
                     </div>
