@@ -1,17 +1,17 @@
 "use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Document, Page } from "react-pdf";
-import { pdfjs } from "react-pdf";
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    "pdfjs-dist/build/pdf.worker.min.mjs",
-    import.meta.url
-).toString();
+// import { Document, Page } from "react-pdf";
+// import { pdfjs } from "react-pdf";
+
+// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+//     "pdfjs-dist/build/pdf.worker.min.mjs",
+//     import.meta.url
+// ).toString();
 
 export default function Component() {
     const [file, setFile] = useState<Blob | null>(null);
@@ -119,7 +119,7 @@ export default function Component() {
                                     />
                                 </div>
                             </div>
-                            {file && (
+                            {/* {file && (
                                 <div>
                                     <button
                                         onClick={() =>
@@ -145,7 +145,7 @@ export default function Component() {
                                         Page {pageNumber} of {numPages}
                                     </p>
                                 </div>
-                            )}
+                            )} */}
                             <Button type="submit" className="w-full">
                                 Upload
                             </Button>
