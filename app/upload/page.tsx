@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import GetFiles from "@/components/GetFiles";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { toast } from "react-hot-toast";
 interface User {
   name: string;
   email: string;
@@ -37,6 +38,7 @@ const Page = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     console.log(dataURL);
+    const toastId = toast.loading("uploading your notes.⌛");
 
     const response = await fetch("/api/uploadnotes", {
       method: "POST",
@@ -58,10 +60,13 @@ const Page = () => {
     if (response.ok) {
       const data = await response.json();
       console.log(data, "DATATATATATATATATATATATATATA");
-
-      alert(`PDF uploaded successfully with ID: ${data.fileId}`);
+      toast.success("notes uploaded!🚀", {
+        id: toastId,
+      });
     } else {
-      alert("PDF upload failed");
+      toast.error("failed to upload notes!", {
+        id: toastId,
+      });
     }
   };
 

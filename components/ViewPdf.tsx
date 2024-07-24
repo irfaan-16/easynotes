@@ -2,20 +2,30 @@
 
 import { useState } from "react";
 import PdfView from "./PdfView";
-import { DownloadIcon } from "@radix-ui/react-icons";
+import { toast } from "react-hot-toast";
 
 const ViewPdf = ({ ID }: { ID: string }) => {
   const [fileBase64, setFileBase64] = useState<string>("");
 
   const handleDownload = () => {};
+
   const handleSubmit = async () => {
     console.log("handleSubmit");
+    const toastId = toast.loading("generating your pdf.⌛");
 
     const response = await fetch(`/api/notes/${ID}`);
-    console.log(response);
-
-    const { base64 } = await response.json();
-    setFileBase64(base64);
+    if (response.ok) {
+      toast.success("Notes generated!🚀", {
+        id: toastId,
+      });
+      console.log(response);
+      const { base64 } = await response.json();
+      setFileBase64(base64);
+    } else {
+      toast.error("Something went wrong🤐", {
+        id: toastId,
+      });
+    }
   };
 
   return (

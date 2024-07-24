@@ -5,6 +5,7 @@ import NavBar from "@/components/Navbar";
 
 import Providers from "@/components/Providers";
 import { ThemeProvider } from "../components/theme-provider";
+import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -28,6 +29,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <NavBar />
+            <Toaster />
             {children}
           </ThemeProvider>
         </body>

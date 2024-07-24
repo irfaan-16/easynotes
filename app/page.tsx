@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const page = () => {
   return (
-    <main className="w-full h-[min-h-screen - 100px] flex flex-col gap-14 py-10 items-center justify-center">
+    <main className="w-full h-landing flex flex-col gap-14 py-10 items-center justify-center">
       <div className="flex flex-col items-center justify-center text-center">
         <div className="space-y-4">
           <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
