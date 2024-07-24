@@ -59,7 +59,7 @@ const GetFiles = ({ setDataURL, setCanUpload }: any) => {
           if (i !== 0) {
             doc.addPage();
           }
-          doc.addImage(imgData, "JPEG", 10, 10, width, height);
+          doc.addImage(imgData, "JPEG", 10, 10, width, height, "", "SLOW");
           resolve();
         };
       });

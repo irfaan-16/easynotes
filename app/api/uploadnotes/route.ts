@@ -12,7 +12,14 @@ const dataURLtoBuffer = (dataURL: string) => {
 
   return Buffer.from(parts[1], "base64");
 };
-
+// Config to set the body size limit
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "50mb", // Adjust size limit as necessary
+    },
+  },
+};
 export const POST = async (req: any) => {
   try {
     const {
