@@ -1,6 +1,7 @@
 // pages/api/upload.js
 import connect from "@/lib/db";
 import { GridFSBucket, ObjectId } from "mongodb";
+import dynamic from "next/dynamic";
 import { NextResponse } from "next/server";
 import { Readable } from "stream";
 
@@ -15,9 +16,7 @@ const dataURLtoBuffer = (dataURL: string) => {
 // Config to set the body size limit
 export const config = {
   api: {
-    bodyParser: {
-      sizeLimit: "50mb", // Adjust size limit as necessary
-    },
+    responseLimit: "40mb",
   },
 };
 export const POST = async (req: any) => {
