@@ -73,10 +73,9 @@ const GetFiles = ({ setDataURL, setCanUpload }: any) => {
       .then(() => {
         setCanUpload(true);
       });
-    // const pdfBlob = doc.output("blob");
-    // const dataURL = doc.output("dataurlstring");
-    // const pdfUrl = URL.createObjectURL(pdfBlob);
-    // setPdfUrl(pdfUrl);
+    const pdfBlob = doc.output("blob");
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    setPdfUrl(pdfUrl);
   };
 
   return (
@@ -142,13 +141,6 @@ const GetFiles = ({ setDataURL, setCanUpload }: any) => {
       </div>
       {pdfUrl && preview && (
         <div>
-          {/* <object
-                        width="100%"
-                        data={pdfUrl}
-                        height="500px"
-                        type="application/pdf"
-                        className="border-none outline-none"
-                    ></object> */}
           <iframe src={pdfUrl} width="100%" height="500px"></iframe>
         </div>
       )}

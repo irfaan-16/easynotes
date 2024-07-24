@@ -2,6 +2,7 @@ import ViewPdf from "@/components/ViewPdf";
 import connect from "@/lib/db";
 import { ObjectId } from "mongodb";
 import Image from "next/image";
+import Link from "next/link";
 
 interface UserDetails {
   _id: string;
@@ -71,6 +72,7 @@ const Page = async ({ params }: { params: any }) => {
               subject
             </span>
             <h3 className="text-3xl">{data?.subject}</h3>
+
           </div>
 
           <div className="mt-4">
@@ -80,20 +82,22 @@ const Page = async ({ params }: { params: any }) => {
             <p>{data?.description}</p>
           </div>
         </div>
-        <div className="p-4 rounded-md bg-[rgba(0,0,0,0.7)] flex flex-col gap-3 text-center items-center w-max mt-10">
-          <Image
-            src={data?.userDetails?.avatar as string}
-            height={80}
-            width={80}
-            alt="User avatar"
-            className="rounded-full h-16 w-16"
-          />
+        <Link href={`/user/${data?.userDetails?.email}`}>
+          <div className="p-4 rounded-md bg-[rgba(0,0,0,0.7)] flex flex-col gap-3 text-center items-center w-max mt-10 relative pt-10">
+            <Image
+              src={data?.userDetails?.avatar as string}
+              height={80}
+              width={80}
+              alt="User avatar"
+              className="rounded-full h-16 w-16 absolute -top-7 shadow-profile"
+            />
 
-          <div>
-            <h4 className="text-2xl">{data?.userDetails?.name}</h4>
-            <span>{data?.userDetails?.email}</span>
+            <div>
+              <h4 className="text-2xl">{data?.userDetails?.name}</h4>
+              <span>{data?.userDetails?.email}</span>
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
       <div className="flex flex-wrap gap-6 p-4 justify-center">
         <ViewPdf ID={ID} />

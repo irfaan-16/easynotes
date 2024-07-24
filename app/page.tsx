@@ -6,7 +6,7 @@ const page = () => {
       <div className="flex flex-col items-center justify-center text-center">
         <div className="space-y-4">
           <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-            Share and Discover Notes
+            Share and Discover <span className="text-green-500">Notes</span>
           </h1>
           <p className="max-w-[720px] text-muted-foreground md:text-xl">
             Easily share your class notes with other students and discover new

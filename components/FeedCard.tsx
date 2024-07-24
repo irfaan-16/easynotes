@@ -29,10 +29,10 @@ export default function Component({
         </CardHeader>
         <CardContent className="p-4 grid gap-4">
           <div>
-            <h3 className="text-xl font-semibold">{subject}</h3>
-            <p className="text-muted-foreground">{desc}</p>
+            <h3 className="text-xl font-semibold border-b-2 pb-3">{subject}</h3>
+            <p className="text-muted-foreground mt-2">{desc}</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 px-4 py-2 bg-[rgba(0,0,0,0.12)] rounded-md dark:bg-white/10">
             <Avatar>
               <AvatarImage src={avatar} />
             </Avatar>
